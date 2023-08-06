@@ -135,9 +135,7 @@ const Home: NextPage = () => {
                 style={{ width: 300, height: 300 }}
               />
             )}
-<p className={`${styles.centeredText}`}>
-  Embark on a thrilling treasure hunt across Long Island's finest breweries. This digital treasure map will lead you on a quest, offering tantalizing beer flights as a reward and <span className={styles.boldText}>unforgettable memories as the treasure's sweet bounty!</span>
-</p>
+<p className={`${styles.centeredText}`}>Step into the world of the Country Groupies, where the twang of guitars and heartfelt lyrics create a community of like-minded souls, embracing the timeless allure of country music. Being a Country Groupie means immersing yourself in a culture that celebrates the raw emotions, stories of life, and the power of country tunes to heal, uplift spirits, and set hearts dancing to the rhythm of life.</p>
 <p className={`${styles.limitText}`}>LIMITED TO ONE PURCHASE PER EMAIL ADDRESS</p>
             <p>Price: 150$</p>
           </div>
