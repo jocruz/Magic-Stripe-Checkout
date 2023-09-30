@@ -12,7 +12,7 @@ import {
   useDisconnect,
   useNFT,
 } from "@thirdweb-dev/react";
-import { useMagic } from "@thirdweb-dev/react/evm/connectors/magic";
+// import { useMagic } from "@thirdweb-dev/react/evm/connectors/magic";
 import type { NextPage } from "next";
 import Form from "../components/Form";
 import { EDITION_ADDRESS } from "../constants/addresses";
@@ -23,7 +23,7 @@ import { useConnect } from "@thirdweb-dev/react";
 
 const Home: NextPage = () => {
   const address = useAddress();
-  const connectWithMagic = useMagic();
+  // const connectWithMagic = useMagic();
   const disconnect = useDisconnect();
   const [email, setEmail] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
