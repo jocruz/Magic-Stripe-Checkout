@@ -18,6 +18,8 @@ import Form from "../components/Form";
 import { EDITION_ADDRESS } from "../constants/addresses";
 import styles from "../styles/Home.module.css";
 import TermsAndConditions from "../components/TermsAndConditions";
+import { magicLink } from "@thirdweb-dev/react";
+import { useConnect } from "@thirdweb-dev/react";
 
 const Home: NextPage = () => {
   const address = useAddress();
@@ -32,6 +34,11 @@ const Home: NextPage = () => {
   const { data: nft, error } = useNFT(contract, 2);
   const [clientSecret, setClientSecret] = useState("");
   const [message, setMessage] = useState<string | null>(null);
+  const connect = useConnect();
+
+  const magicLinkConfig = magicLink({
+    apiKey:  process.env.NEXT_PUBLIC_MAGIC_LINK_API_KEY as string,
+  });
 
   const stripe = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
@@ -84,34 +91,36 @@ const Home: NextPage = () => {
     }
   }, [address, customerId]);
 
-  const handleLogin = () => {
+const handleLogin = async () => {
     if (firstName && lastName && phoneNumber && email) {
-      fetch("/api/create_customer", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          phoneNumber,
-          email,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.alreadyPurchased) {
-            setMessage("This email has already been used for a successful purchase.");
-          } else {
-            if (data.customerId) {
-              setCustomerId(data.customerId);
-              connectWithMagic({ email });
-            }
-          }
-        })
-        .catch((error) => {
-          console.error("Error creating customer:", error);
+      try {
+        const response = await fetch("/api/create_customer", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            phoneNumber,
+            email,
+          }),
         });
+        
+        const data = await response.json();
+        
+        if (data.alreadyPurchased) {
+          setMessage("This email has already been used for a successful purchase.");
+        } else {
+          if (data.customerId) {
+            setCustomerId(data.customerId);
+            await connect(magicLinkConfig, {email:email});
+            
+          }
+        }
+      } catch (error) {
+        console.error("Error creating customer:", error);
+      }
     }
   };
 
